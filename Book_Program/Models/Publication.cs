@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Book_Program.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Book_Program.Models
 {
-    public class Publication
+    public class Publication: IEntity
     {
         public int id { get; set; }
         public string Name { get; set; }

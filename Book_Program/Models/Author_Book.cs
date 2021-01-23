@@ -1,11 +1,12 @@
-﻿using System;
+﻿using Book_Program.Repository;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Book_Program.Models
 {
-    public class Author_Book
+    public class Author_Book : IEntity
     {
         public int id { get; set; }
         public int Bookid { get; set; }

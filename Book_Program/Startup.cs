@@ -1,4 +1,6 @@
 using Book_Program.Database;
+using Book_Program.Models;
+using Book_Program.Repository;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -30,6 +32,12 @@ namespace Book_Program
         {
             services.AddControllers();
             services.AddDbContext<BooksContext>(o => { o.UseSqlServer(Configuration.GetConnectionString("BooksConection")); });
+            services.AddTransient<IRepository<Book>, Repository<Book>>();
+            services.AddTransient<IRepository<Author>, Repository<Author>>();
+            services.AddTransient<IRepository<Publication>, Repository<Publication>>();
+            services.AddTransient<IRepository<Category>, Repository<Category>>();
+            services.AddTransient<IRepository<Author_Book>, Repository<Author_Book>>();
+            services.AddTransient<IRepository<Book_Catrgiry>, Repository<Book_Catrgiry>>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
