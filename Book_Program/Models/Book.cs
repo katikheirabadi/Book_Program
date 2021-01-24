@@ -10,6 +10,8 @@ namespace Book_Program.Models
     {
         public int id { get; set; }
         public string Name { get; set; }
+        public string publisher { get; set; }
+        public DateTime publishDate { get; set; }
         public int PublicationId { get; set; }
         public Publication Publication { get; set; }
         public List<Book_Catrgiry>  book_Catrgiries { get; set; }

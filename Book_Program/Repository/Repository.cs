@@ -9,7 +9,6 @@ namespace Book_Program.Repository
     public class Repository<T> : IRepository<T> where T:class,IEntity
     {
         private readonly BooksContext booksContext;
-
         public Repository(BooksContext booksContext)
         {
             this.booksContext = booksContext;
