@@ -42,11 +42,12 @@ namespace Book_Program.Controllers
             return "delete...";
         }
         [HttpPut]
-        public Category Update(Category category)
+        public string Update(Category category)
         {
-            var end = repository.Update(category);
+           var end= repository.Update(category);
             repository.Save();
             return end;
+            
         }
     }
 }

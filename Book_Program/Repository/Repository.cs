@@ -43,11 +43,11 @@ namespace Book_Program.Repository
             booksContext.SaveChanges();
         }
 
-        public T Update(T item)
-        {
-            booksContext.Update(item); 
-            booksContext.Entry<T>(item).State = EntityState.Modified;
-            return item;
+        public string Update(T item)
+        { 
+            booksContext.Update(item);
+            return item.id + " updated...";
+           
         }
     }
 }

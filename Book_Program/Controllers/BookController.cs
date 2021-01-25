@@ -36,30 +36,35 @@ namespace Book_Program.Controllers
             return repository.GetAll();
         }
         [HttpDelete("{id}")]
-        public string Delete(int id)
+        public void Delete(int id)
         {
             repository.Delete(id);
             repository.Save();
-            return "delete...";
+            
         }
         [HttpPut]
-        public Book Update(Book book)
+        public string Update(Book book)
         {
             var end = repository.Update(book);
             repository.Save();
             return end;
+
         }
-        //[HttpPost("Search")]
+       // [HttpPost("Search")]
         //public OUTPUT_BOOKLIST Search(search_model search)
         //{
         //    var allbooks = repository.GetAll();
         //    var endlist = new OUTPUT_BOOKLIST();
-        //    if(search.publication!=null)
+        //    if (search.publication != null)
         //    {
-        //        endlist.books= allbooks.Where(b => b.Publication.Name == search.publication).ToList();
+        //        endlist.books = allbooks.Where(b => b.Publication.Name == search.publication).ToList();
+        //    }
+        //    if(search.categories!=null)
+        //    {
+
         //    }
 
-            
+
         //    return endlist;
         //}
     }

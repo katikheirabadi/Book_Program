@@ -42,9 +42,9 @@ namespace Book_Program.Controllers
             return "delete...";
         }
         [HttpPut]
-        public Author Update(Author author)
+        public string Update(Author author)
         {
-            var end = repository.Update(author);
+          var end=  repository.Update(author);
             repository.Save();
             return end;
         }

@@ -11,7 +11,7 @@ namespace Book_Program.Repository
         List<T> GetAll();
         string Insert(T item);
         string Delete(int id);
-        T Update(T item);
+        string Update(T item);
         void Save();
     }
 }

@@ -42,7 +42,7 @@ namespace Book_Program.Controllers
             return "delete...";
         }
         [HttpPut]
-        public Publication Update(Publication publication)
+        public string Update(Publication publication)
         {
             var end = repository.Update(publication);
             repository.Save();
