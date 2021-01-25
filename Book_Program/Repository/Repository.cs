@@ -1,4 +1,5 @@
 ﻿using Book_Program.Database;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,6 +45,7 @@ namespace Book_Program.Repository
 
         public T Update(T item)
         {
+            booksContext.Entry<T>(item).State = EntityState.Modified;
             booksContext.Update(item);
             return item;
         }
