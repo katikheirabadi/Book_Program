@@ -1,4 +1,5 @@
 ﻿using Book_Program.Models;
+using Book_Program.Models.Search;
 using Book_Program.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -34,7 +35,7 @@ namespace Book_Program.Controllers
         {
             return repository.GetAll();
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public string Delete(int id)
         {
             repository.Delete(id);
@@ -44,9 +45,22 @@ namespace Book_Program.Controllers
         [HttpPut]
         public Book Update(Book book)
         {
-            var end= repository.Update(book);
+            var end = repository.Update(book);
             repository.Save();
             return end;
         }
+        //[HttpPost("Search")]
+        //public OUTPUT_BOOKLIST Search(search_model search)
+        //{
+        //    var allbooks = repository.GetAll();
+        //    var endlist = new OUTPUT_BOOKLIST();
+        //    if(search.publication!=null)
+        //    {
+        //        endlist.books= allbooks.Where(b => b.Publication.Name == search.publication).ToList();
+        //    }
+
+            
+        //    return endlist;
+        //}
     }
 }
