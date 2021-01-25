@@ -45,8 +45,9 @@ namespace Book_Program.Repository
 
         public T Update(T item)
         {
+    
+            booksContext.Update(item); 
             booksContext.Entry<T>(item).State = EntityState.Modified;
-            booksContext.Update(item);
             return item;
         }
     }
