@@ -42,9 +42,17 @@ namespace Book_Program.Controllers
         {
             if (repository.GetAll().Where(a => a.id == id).ToList().Count != 0)
             {
-                var result = repository.Delete(id);
-                repository.Save();
-                return result;
+                try
+                {
+                    var result = repository.Delete(id);
+                    repository.Save();
+                    return result;
+                }
+                catch
+                {
+                    return "There is a dependency for this author in Author-Book table ....";
+
+                }
             }
             return "Not found any author with this id for delete";
 

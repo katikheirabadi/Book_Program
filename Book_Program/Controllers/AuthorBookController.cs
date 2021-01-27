@@ -14,20 +14,24 @@ namespace Book_Program.Controllers
     public class AuthorBookController : ControllerBase
     {
         private readonly IRepository<Author_Book> repository;
-        public AuthorBookController(IRepository<Author_Book> repository)
+        private readonly IRepository<Book> b_repository;
+        private readonly IRepository<Author> a_repository;
+        public AuthorBookController(IRepository<Author_Book> repository, IRepository<Author> a_repository, IRepository<Book> b_repository)
         {
             this.repository = repository;
+            this.a_repository = a_repository;
+            this.b_repository = b_repository;
         }
         [HttpPost]
         public string Register(Author_Book author_Book)
         {
-            var testbook = repository.GetAll().Where(ab => ab.Bookid == author_Book.Bookid).ToList().Count;
-            var testauthor = repository.GetAll().Where(ab => ab.Authorid == author_Book.Authorid).ToList().Count;
+            var testbook = b_repository.GetAll().Where(ab => ab.id == author_Book.Bookid).ToList().Count;
+            var testauthor = a_repository.GetAll().Where(ab => ab.id == author_Book.Authorid).ToList().Count;
 
             if (testauthor == 0)
-                return "Not Found any author whit this id";
+                return "Not Found any author with this id";
             if (testbook == 0)
-                return "Not Found any book whit this id";
+                return "Not Found any book with this id";
 
             repository.Insert(author_Book);
             repository.Save();

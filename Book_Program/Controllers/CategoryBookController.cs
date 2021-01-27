@@ -14,6 +14,8 @@ namespace Book_Program.Controllers
     public class CategoryBookController : ControllerBase
     {
         private readonly IRepository<Book_Catrgiry> repository;
+        private readonly IRepository<Category> c_repository;
+        private readonly IRepository<Book> b_repository;
         public CategoryBookController(IRepository<Book_Catrgiry> repository)
         {
             this.repository = repository;
@@ -21,8 +23,8 @@ namespace Book_Program.Controllers
         [HttpPost]
         public string Register(Book_Catrgiry bookcat)
         {
-            var testbook = repository.GetAll().Where(ab => ab.Bookid == bookcat.Bookid).ToList().Count;
-            var testcategory = repository.GetAll().Where(ab => ab.Categoryid == bookcat.Categoryid).ToList().Count;
+            var testbook = b_repository.GetAll().Where(ab => ab.id == bookcat.Bookid).ToList().Count;
+            var testcategory = c_repository.GetAll().Where(ab => ab.id == bookcat.Categoryid).ToList().Count;
 
             if (testcategory == 0)
                 return "Not Found any author whit this id";

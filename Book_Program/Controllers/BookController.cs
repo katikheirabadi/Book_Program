@@ -53,9 +53,17 @@ namespace Book_Program.Controllers
         {
             if (repository.GetAll().Where(b => b.id == id).ToList().Count != 0)
             {
-                var result = repository.Delete(id);
-                repository.Save();
-                return result;
+                try
+                {
+                    var result = repository.Delete(id);
+                    repository.Save();
+                    return result;
+                }
+                catch
+                {
+                    return "There is a dependency for this book in Book-Category table or Author-Book table....";
+
+                }
             }
             return "Not found any book with this id for delete";
         }
