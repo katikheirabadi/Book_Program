@@ -16,9 +16,11 @@ namespace Book_Program.Controllers
         private readonly IRepository<Book_Catrgiry> repository;
         private readonly IRepository<Category> c_repository;
         private readonly IRepository<Book> b_repository;
-        public CategoryBookController(IRepository<Book_Catrgiry> repository)
+        public CategoryBookController(IRepository<Book_Catrgiry> repository, IRepository<Category> c_repository, IRepository<Book> b_repository)
         {
             this.repository = repository;
+            this.c_repository = c_repository;
+            this.b_repository = b_repository;
         }
         [HttpPost]
         public string Register(Book_Catrgiry bookcat)

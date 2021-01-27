@@ -86,9 +86,9 @@ namespace Book_Program.Controllers
         public OUTPUT_BOOKLIST Search(search_model search)
         {
             var end = new OUTPUT_BOOKLIST();
-            var publication = p_repository.GetAll().Where(p => p.Name == search.publication).Select(p=> p.id).FirstOrDefault();
-            var categories = c_repository.GetAll().Where(c => search.categories.Contains(c.Name)).Select(c=>c.id);
-            var authors = a_repository.GetAll().Where(a => search.authors.Contains(a.FullName)).Select(a => a.id);
+            var publication = p_repository.GetAll().Where(p =>p.Name.Contains(search.publication)!=false).Select(p=> p.id).FirstOrDefault();
+            var categories = c_repository.GetAll().Where(c => search.categories.Contains(c.Name)).Select(c=>c.id).ToList();
+            var authors = a_repository.GetAll().Where(a => search.authors.Contains(a.FullName)).Select(a => a.id).ToList();
 
             var books = new List<Book>();
             if(publication!=0)
@@ -114,8 +114,14 @@ namespace Book_Program.Controllers
                     if (!books.Contains(book))
                         books.Add(book);
             }
-
-            end.books = books.Select(b => new Result() { Name = b.Name, ISBN = b.ISBN, publishDate = b.publishDate, publisher = b.publisher, authors = b.Authors.Select(a => a.Author.FullName).ToList() }).ToList();
+            try
+            {
+                end.books = books.Select(b => new Result() { Name = b.Name, ISBN = b.ISBN, publishDate = b.publishDate, publisher = b.publisher, authors = b.Authors.Select(a => a.Author.FullName).ToList() }).ToList();
+            }
+            catch
+            {
+                return null;
+            }
             return end;
         }
     }
