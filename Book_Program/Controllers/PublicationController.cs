@@ -27,7 +27,9 @@ namespace Book_Program.Controllers
         [HttpGet("{id}")]
         public Publication Get(int id)
         {
-            return repository.Get(id);
+            if (repository.GetAll().Where(p => p.id == id).ToList().Count != 0)
+                return repository.Get(id);
+            return null;
         }
         [HttpGet]
         public List<Publication> GetAll()
@@ -37,16 +39,25 @@ namespace Book_Program.Controllers
         [HttpDelete]
         public string Delete(int id)
         {
-            repository.Delete(id);
-            repository.Save();
-            return "delete...";
+            if (repository.GetAll().Where(p => p.id == id).ToList().Count != 0)
+            {
+                var result = repository.Delete(id);
+                repository.Save();
+                return result;
+            }
+            return "Not found any publication with this id for delete";
         }
         [HttpPut]
         public string Update(Publication publication)
         {
-            var end = repository.Update(publication);
-            repository.Save();
-            return end;
+            if (repository.GetAll().Where(p => p.id == publication.id).ToList().Count != 0)
+            {
+                var end = repository.Update(publication);
+                repository.Save();
+                return end;
+            }
+            return "Not found any publication with this id for update";
+
         }
     }
 }

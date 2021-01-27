@@ -21,16 +21,29 @@ namespace Book_Program.Controllers
         [HttpPost]
         public string Register(Author_Book author_Book)
         {
+            var testbook = repository.GetAll().Where(ab => ab.Bookid == author_Book.Bookid).ToList().Count;
+            var testauthor = repository.GetAll().Where(ab => ab.Authorid == author_Book.Authorid).ToList().Count;
+            
+            if (testauthor == 0)
+               return "Not Found any author whit this id";
+            if(testbook == 0)
+               return "Not Found any book whit this id";
+          
             repository.Insert(author_Book);
             repository.Save();
             return author_Book.id + " register...";
+
         }
         [HttpDelete]
         public string Un_Register(int id)
         {
-            repository.Delete(id);
-            repository.Save();
-            return $"the author_book with id :{id} is deleted...";
+            if(repository.GetAll().Where(ab=>ab.id==id).ToList().Count!=0)
+            {
+               repository.Delete(id);
+               repository.Save();
+               return $"the author_book with id :{id} is deleted...";
+            }
+            return "Not Found any author-book to un-register";
         }
     }
 }

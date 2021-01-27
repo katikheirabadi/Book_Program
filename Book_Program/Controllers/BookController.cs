@@ -20,15 +20,18 @@ namespace Book_Program.Controllers
             this.repository = repository;
         }
         [HttpPost]
-        public void Create(Book book)
+        public string Create(Book book)
         {
-            repository.Insert(book);
+            var result= repository.Insert(book);
             repository.Save();
+            return result;
         }
         [HttpGet("{id}")]
         public Book Get(int id)
         {
-            return repository.Get(id);
+            if(repository.GetAll().Where(b=>b.id==id).ToList().Count!=0)
+               return repository.Get(id);
+            return null;
         }
         [HttpGet]
         public List<Book> GetAll()
@@ -36,19 +39,26 @@ namespace Book_Program.Controllers
             return repository.GetAll();
         }
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public string Delete(int id)
         {
-            repository.Delete(id);
-            repository.Save();
-            
+            if (repository.GetAll().Where(b => b.id == id).ToList().Count != 0)
+            {
+                var result = repository.Delete(id);
+                repository.Save();
+                return result;
+            }
+            return "Not found any book with this id for delete";
         }
         [HttpPut]
         public string Update(Book book)
         {
-            var end = repository.Update(book);
-            repository.Save();
-            return end;
-
+            if (repository.GetAll().Where(b => b.id == book.id).ToList().Count != 0)
+            {
+                  var end = repository.Update(book);
+                  repository.Save();
+                  return end;
+            }
+            return "Not found any book with this id for update";
         }
         [HttpPost("Search")]
         public OUTPUT_BOOKLIST Search(search_model search)
