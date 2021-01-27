@@ -34,7 +34,7 @@ namespace Book_Program.Controllers
             return author_Book.id + " register...";
 
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public string Un_Register(int id)
         {
             if (repository.GetAll().Where(ab => ab.id == id).ToList().Count != 0)

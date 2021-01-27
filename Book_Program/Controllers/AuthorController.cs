@@ -37,7 +37,7 @@ namespace Book_Program.Controllers
         {
             return repository.GetAll();
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public string Delete(int id)
         {
             if (repository.GetAll().Where(a => a.id == id).ToList().Count != 0)

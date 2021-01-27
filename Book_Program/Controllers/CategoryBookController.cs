@@ -33,7 +33,7 @@ namespace Book_Program.Controllers
             repository.Save();
             return bookcat.id + " register...";
         }
-        [HttpDelete]
+        [HttpDelete("{id}")]
         public string Un_Register(int id)
         {
             if (repository.GetAll().Where(cb => cb.id == id).ToList().Count != 0)
