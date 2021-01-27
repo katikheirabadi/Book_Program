@@ -15,7 +15,7 @@ namespace Book_Program.Models.Search
     {
         public string Name { get; set; }
         public List<string> authors { get; set; }
-        public string publishDate { get; set; }
+        public DateTime publishDate { get; set; }
         public string publisher { get; set; }
         public string ISBN { get; set; }
     }

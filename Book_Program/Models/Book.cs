@@ -12,7 +12,7 @@ namespace Book_Program.Models
         public string Name { get; set; }
         public int PublicationId { get; set; }
         public string publisher { get; set; }
-        public string publishDate { get; set; }
+        public DateTime publishDate { get; set; }
         public string ISBN { get; set; }
         public Publication Publication { get; set; }
         public List<Book_Catrgiry>  Catrgiries { get; set; }
