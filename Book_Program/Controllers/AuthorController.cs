@@ -23,7 +23,7 @@ namespace Book_Program.Controllers
         {
             var result = repository.Insert(author);
             repository.Save();
-            return result;
+            return author.id+ result;
         }
         [HttpGet("{id}")]
         public Author Get(int id)
@@ -52,13 +52,16 @@ namespace Book_Program.Controllers
         [HttpPut]
         public string Update(Author author)
         {
-            if (repository.GetAll().Where(b => b.id == author.id).ToList().Count != 0)
+            try
             {
                 var end = repository.Update(author);
                 repository.Save();
                 return end;
             }
-            return "Not found any author with this id for update";
+            catch (Exception)
+            {
+                return " Not found any author with this id for update";
+            }
         }
     }
 }

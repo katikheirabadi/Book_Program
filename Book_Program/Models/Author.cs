@@ -10,6 +10,6 @@ namespace Book_Program.Models
     {
         public int id { get; set; }
         public string FullName { get; set; }
-        public List<Author_Book> author_Books { get; set; }
+        public List<Author_Book> Books { get; set; }
     }
 }

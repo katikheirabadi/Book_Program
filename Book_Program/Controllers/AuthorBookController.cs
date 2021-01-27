@@ -23,12 +23,12 @@ namespace Book_Program.Controllers
         {
             var testbook = repository.GetAll().Where(ab => ab.Bookid == author_Book.Bookid).ToList().Count;
             var testauthor = repository.GetAll().Where(ab => ab.Authorid == author_Book.Authorid).ToList().Count;
-            
+
             if (testauthor == 0)
-               return "Not Found any author whit this id";
-            if(testbook == 0)
-               return "Not Found any book whit this id";
-          
+                return "Not Found any author whit this id";
+            if (testbook == 0)
+                return "Not Found any book whit this id";
+
             repository.Insert(author_Book);
             repository.Save();
             return author_Book.id + " register...";
@@ -37,13 +37,18 @@ namespace Book_Program.Controllers
         [HttpDelete]
         public string Un_Register(int id)
         {
-            if(repository.GetAll().Where(ab=>ab.id==id).ToList().Count!=0)
+            if (repository.GetAll().Where(ab => ab.id == id).ToList().Count != 0)
             {
-               repository.Delete(id);
-               repository.Save();
-               return $"the author_book with id :{id} is deleted...";
+                repository.Delete(id);
+                repository.Save();
+                return $"the author_book with id :{id} is deleted...";
             }
             return "Not Found any author-book to un-register";
+        }
+        [HttpGet]
+        public List<Author_Book> GetAll()
+        {
+            return repository.GetAll();
         }
     }
 }

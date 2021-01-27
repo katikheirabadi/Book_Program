@@ -19,10 +19,11 @@ namespace Book_Program.Controllers
             this.repository = repository;
         }
         [HttpPost]
-        public void Create(Category category)
+        public string Create(Category category)
         {
-            repository.Insert(category);
+            var result = repository.Insert(category);
             repository.Save();
+            return category.id + result;
         }
         [HttpGet("{id}")]
         public Category Get(int id)
@@ -50,13 +51,16 @@ namespace Book_Program.Controllers
         [HttpPut]
         public string Update(Category category)
         {
-            if (repository.GetAll().Where(c => c.id == category.id).ToList().Count != 0)
+            try
             {
                 var end = repository.Update(category);
                 repository.Save();
                 return end;
             }
-            return "Not found any category with this id for update";
+            catch (Exception)
+            {
+                return " Not found any category with this id for update";
+            }
 
         }
     }

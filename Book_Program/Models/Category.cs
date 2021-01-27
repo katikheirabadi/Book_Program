@@ -10,6 +10,6 @@ namespace Book_Program.Models
     {
         public int id { get; set; }
         public string Name { get; set; }
-        public List<Book_Catrgiry> book_Catrgiries { get; set; }
+        public List<Book_Catrgiry> books { get; set; }
     }
 }

@@ -15,7 +15,7 @@ namespace Book_Program.Models
         public string publishDate { get; set; }
         public string ISBN { get; set; }
         public Publication Publication { get; set; }
-        public List<Book_Catrgiry>  book_Catrgiries { get; set; }
-        public List<Author_Book>  author_Books { get; set; }
+        public List<Book_Catrgiry>  Catrgiries { get; set; }
+        public List<Author_Book>  Authors { get; set; }
     }
 }

@@ -19,10 +19,11 @@ namespace Book_Program.Controllers
             this.repository = repository;
         }
         [HttpPost]
-        public void Create(Publication Publication)
+        public string Create(Publication Publication)
         {
-            repository.Insert(Publication);
+            var result = repository.Insert(Publication);
             repository.Save();
+            return Publication.id + result;
         }
         [HttpGet("{id}")]
         public Publication Get(int id)
@@ -50,13 +51,16 @@ namespace Book_Program.Controllers
         [HttpPut]
         public string Update(Publication publication)
         {
-            if (repository.GetAll().Where(p => p.id == publication.id).ToList().Count != 0)
+            try
             {
                 var end = repository.Update(publication);
                 repository.Save();
                 return end;
             }
-            return "Not found any publication with this id for update";
+            catch (Exception)
+            {
+                return " Not found any publication with this id for update";
+            }
 
         }
     }

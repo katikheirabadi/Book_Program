@@ -44,5 +44,10 @@ namespace Book_Program.Controllers
             }
             return "Not Found any cattegory-book to un-register";
         }
+        [HttpGet]
+        public List<Book_Catrgiry> GetAll()
+        {
+            return repository.GetAll();
+        }
     }
 }

@@ -35,7 +35,7 @@ namespace Book_Program.Repository
         public string Insert(T item)
         {
             booksContext.Add(item);
-            return item.id + " added...";
+            return  " added...";
         }
 
         public void Save()

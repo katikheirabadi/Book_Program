@@ -15,16 +15,26 @@ namespace Book_Program.Controllers
     public class BookController : ControllerBase
     {
         private readonly IRepository<Book> repository;
-        public BookController(IRepository<Book> repository)
+        private readonly IRepository<Publication> p_repository;
+        private readonly IRepository<Author> a_repository;
+        private readonly IRepository<Category> c_repository;
+        private readonly IRepository<Author_Book> ab_repository;
+        private readonly IRepository<Book_Catrgiry> cb_repository;
+        public BookController(IRepository<Book> repository, IRepository<Publication> p_repository, IRepository<Book_Catrgiry> cb_repository, IRepository<Author_Book> ab_repository, IRepository<Category> c_repository, IRepository<Author> a_repository)
         {
             this.repository = repository;
+            this.p_repository = p_repository;
+            this.cb_repository = cb_repository;
+            this.ab_repository = ab_repository;
+            this.c_repository = c_repository;
+            this.a_repository = a_repository;
         }
         [HttpPost]
         public string Create(Book book)
         {
             var result= repository.Insert(book);
             repository.Save();
-            return result;
+            return book.id +result;
         }
         [HttpGet("{id}")]
         public Book Get(int id)
@@ -52,70 +62,53 @@ namespace Book_Program.Controllers
         [HttpPut]
         public string Update(Book book)
         {
-            if (repository.GetAll().Where(b => b.id == book.id).ToList().Count != 0)
+            try
             {
-                  var end = repository.Update(book);
-                  repository.Save();
-                  return end;
+                var end = repository.Update(book);
+                repository.Save();
+                return end;
             }
-            return "Not found any book with this id for update";
+            catch (Exception)
+            {
+                return " Not found any book with this id for update";
+            }
+           
         }
         [HttpPost("Search")]
         public OUTPUT_BOOKLIST Search(search_model search)
         {
-            var allbooks = repository.GetAll();
-            var endList = new OUTPUT_BOOKLIST();
-           
-            if (search.publication != null)
+            var end = new OUTPUT_BOOKLIST();
+            var publication = p_repository.GetAll().Where(p => p.Name == search.publication).Select(p=> p.id).FirstOrDefault();
+            var categories = c_repository.GetAll().Where(c => search.categories.Contains(c.Name)).Select(c=>c.id);
+            var authors = a_repository.GetAll().Where(a => search.authors.Contains(a.FullName)).Select(a => a.id);
+
+            var books = new List<Book>();
+            if(publication!=0)
             {
-                endList.books = allbooks.Where(b => b.Publication.Name == search.publication).ToList();
+                var pbooks = repository.GetAll().Where(b => b.PublicationId == publication).ToList();
+                foreach (var book in pbooks)
+                    if (!books.Contains(book))
+                        books.Add(book);
             }
-            if (search.categories != null)
+            if(categories != null)
             {
-                var bookcategory = new List<List<Book_Catrgiry>>();
-                foreach (var book in allbooks)
-                    bookcategory.Add(book.book_Catrgiries);
-
-                for(int i=0; i<bookcategory.Count;i++)
-                {
-                    for(int j=0;j<bookcategory[i].Count;j++)
-                    {
-                        var categoryname = bookcategory[i][j].Category.Name;
-                        if (search.categories.Contains(categoryname))
-                        {
-                            var exist = allbooks.Where(b => b.book_Catrgiries.Contains(bookcategory[i][j])).ToList();
-                            foreach (var book in exist)
-                                if (!endList.books.Contains(book))
-                                    endList.books.Add(book);
-                        }
-
-                    }
-                }
+                var cb = cb_repository.GetAll().Where(cb => categories.Contains(cb.Categoryid)).Select(cb => cb.Bookid).ToList();
+                var cbooks = repository.GetAll().Where(b => cb.Contains(b.id)).ToList();
+                foreach (var book in cbooks)
+                    if (!books.Contains(book))
+                        books.Add(book);
             }
-            if(search.authors != null)
+            if(authors != null)
             {
-                var boocauthor = new List<List<Author_Book>>();
-                foreach (var book in allbooks)
-                    boocauthor.Add(book.author_Books);
-
-                for (int i = 0; i < boocauthor.Count; i++)
-                {
-                    for (int j = 0; j < boocauthor[i].Count; j++)
-                    {
-                        var authorname = boocauthor[i][j].Author.FullName;
-                        if (search.authors.Contains(authorname))
-                        {
-                            var exist = allbooks.Where(b => b.author_Books.Contains(boocauthor[i][j])).ToList();
-                            foreach (var book in exist)
-                                if (!endList.books.Contains(book))
-                                    endList.books.Add(book);
-                        }
-
-                    }
-                }
+                var ab = ab_repository.GetAll().Where(cb => authors.Contains(cb.Authorid)).Select(ab => ab.Bookid).ToList();
+                var abooks = repository.GetAll().Where(b => ab.Contains(b.id)).ToList();
+                foreach (var book in abooks)
+                    if (!books.Contains(book))
+                        books.Add(book);
             }
 
-            return endList;
+            end.books = books.Select(b => new Result() { Name = b.Name, ISBN = b.ISBN, publishDate = b.publishDate, publisher = b.publisher, authors = b.Authors.Select(a => a.Author.FullName).ToList() }).ToList();
+            return end;
         }
     }
 }
