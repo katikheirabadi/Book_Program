@@ -19,16 +19,18 @@ namespace Book_Program.Controllers
             this.repository = repository;
         }
         [HttpPost]
-        public void Register(Author_Book author_Book)
+        public string Register(Author_Book author_Book)
         {
             repository.Insert(author_Book);
             repository.Save();
+            return author_Book.id + " register...";
         }
         [HttpDelete]
-        public void Un_Register(int id)
+        public string Un_Register(int id)
         {
             repository.Delete(id);
             repository.Save();
+            return $"the author_book with id :{id} is deleted...";
         }
     }
 }

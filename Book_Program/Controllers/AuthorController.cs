@@ -19,10 +19,11 @@ namespace Book_Program.Controllers
             this.repository = repository;
         }
         [HttpPost]
-        public void Create(Author author)
+        public string Create(Author author)
         {
-            repository.Insert(author);
+            var result = repository.Insert(author);
             repository.Save();
+            return result;
         }
         [HttpGet("{id}")]
         public Author Get(int id)
