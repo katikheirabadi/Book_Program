@@ -32,6 +32,11 @@ namespace Book_Program.Repository
             return booksContext.Set<T>().ToList();
         }
 
+        public IQueryable<T> GetQuery()
+        {
+           return booksContext.Set<T>().AsQueryable();
+        }
+
         public string Insert(T item)
         {
             booksContext.Add(item);

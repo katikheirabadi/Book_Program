@@ -2,6 +2,7 @@
 using Book_Program.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -70,6 +71,15 @@ namespace Book_Program.Controllers
                 return " Not found any publication with this id for update";
             }
 
+
+        }
+        [HttpGet("searchbyid")]
+        public List<Publication> search()
+        {
+            //var publication = repository.GetAll().Where(Publication => Publication.id == id).FirstOrDefault();
+            //if (publication == null)
+            //    return;
+           return  repository.GetQuery().Include(b => b.books).ToList();
         }
     }
 }

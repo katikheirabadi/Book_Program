@@ -13,5 +13,6 @@ namespace Book_Program.Repository
         string Delete(int id);
         string Update(T item);
         void Save();
+        IQueryable<T> GetQuery();
     }
 }

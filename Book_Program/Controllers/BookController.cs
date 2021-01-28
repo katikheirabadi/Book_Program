@@ -3,6 +3,7 @@ using Book_Program.Models.Search;
 using Book_Program.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,7 @@ namespace Book_Program.Controllers
         [HttpPost]
         public string Create(Book book)
         {
+          
             var result= repository.Insert(book);
             repository.Save();
             return book.id +result;
@@ -82,47 +84,53 @@ namespace Book_Program.Controllers
             }
            
         }
-        [HttpPost("Search")]
-        public OUTPUT_BOOKLIST Search(search_model search)
-        {
-            var end = new OUTPUT_BOOKLIST();
-            var publication = p_repository.GetAll().Where(p =>p.Name.Contains(search.publication)!=false).Select(p=> p.id).FirstOrDefault();
-            var categories = c_repository.GetAll().Where(c => search.categories.Contains(c.Name)).Select(c=>c.id).ToList();
-            var authors = a_repository.GetAll().Where(a => search.authors.Contains(a.FullName)).Select(a => a.id).ToList();
+        //[HttpPost("Search")]
+        //public OUTPUT_BOOKLIST Search(search_model search)
+        //{
+        //    var end = new OUTPUT_BOOKLIST();
+        //    var publication = p_repository.GetAll().Where(p =>p.Name.Contains(search.publication)!=false).Select(p=> p.id).FirstOrDefault();
+        //    var categories = c_repository.GetAll().Where(c => search.categories.Contains(c.Name)).Select(c=>c.id).ToList();
+        //    var authors = a_repository.GetAll().Where(a => search.authors.Contains(a.FullName)).Select(a => a.id).ToList();
 
-            var books = new List<Book>();
-            if(publication!=0)
-            {
-                var pbooks = repository.GetAll().Where(b => b.PublicationId == publication).ToList();
-                foreach (var book in pbooks)
-                    if (!books.Contains(book))
-                        books.Add(book);
-            }
-            if(categories != null)
-            {
-                var cb = cb_repository.GetAll().Where(cb => categories.Contains(cb.Categoryid)).Select(cb => cb.Bookid).ToList();
-                var cbooks = repository.GetAll().Where(b => cb.Contains(b.id)).ToList();
-                foreach (var book in cbooks)
-                    if (!books.Contains(book))
-                        books.Add(book);
-            }
-            if(authors != null)
-            {
-                var ab = ab_repository.GetAll().Where(cb => authors.Contains(cb.Authorid)).Select(ab => ab.Bookid).ToList();
-                var abooks = repository.GetAll().Where(b => ab.Contains(b.id)).ToList();
-                foreach (var book in abooks)
-                    if (!books.Contains(book))
-                        books.Add(book);
-            }
-            try
-            {
-                end.books = books.Select(b => new Result() { Name = b.Name, ISBN = b.ISBN, publishDate = b.publishDate, publisher = b.publisher, authors = b.Authors.Select(a => a.Author.FullName).ToList() }).ToList();
-            }
-            catch
-            {
-                return null;
-            }
-            return end;
+        //    var books = new List<Book>();
+        //    if(publication!=0)
+        //    {
+        //        var pbooks = repository.GetAll().Where(b => b.PublicationId == publication).ToList();
+        //        foreach (var book in pbooks)
+        //            if (!books.Contains(book))
+        //                books.Add(book);
+        //    }
+        //    if(categories != null)
+        //    {
+        //        var cb = cb_repository.GetAll().Where(cb => categories.Contains(cb.Categoryid)).Select(cb => cb.Bookid).ToList();
+        //        var cbooks = repository.GetAll().Where(b => cb.Contains(b.id)).ToList();
+        //        foreach (var book in cbooks)
+        //            if (!books.Contains(book))
+        //                books.Add(book);
+        //    }
+        //    if(authors != null)
+        //    {
+        //        var ab = ab_repository.GetAll().Where(cb => authors.Contains(cb.Authorid)).Select(ab => ab.Bookid).ToList();
+        //        var abooks = repository.GetAll().Where(b => ab.Contains(b.id)).ToList();
+        //        foreach (var book in abooks)
+        //            if (!books.Contains(book))
+        //                books.Add(book);
+        //    }
+        //    try
+        //    {
+        //        end.books = books.Select(b => new Result() { Name = b.Name, ISBN = b.ISBN, publishDate = b.publishDate, publisher = b.publisher, authors = b.Authors.Select(a => a.Author.FullName).ToList() }).ToList();
+        //    }
+        //    catch
+        //    {
+        //        return null;
+        //    }
+        //    return end;
+        //}
+
+       [HttpGet("search")]
+       public List<Book> search()
+        {
+            return repository.GetQuery().Include(b => b.Authors).ToList();
         }
     }
 }
